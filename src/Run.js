@@ -2,17 +2,20 @@ import seedrandom from 'seedrandom';
 import { seededRandInt } from './util';
 
 export default class Run {
-    constructor({ numSlots, numChoices, viewUpcoming, viewRemaining, targets }) {
+    constructor({ maxEnergy, numSlots, numChoices, viewUpcoming, viewRemaining, targets }) {
+        this.maxEnergy = maxEnergy;
         this.numSlots = numSlots;
         this.numChoices = numChoices;
         this.viewUpcoming = viewUpcoming;
         this.viewRemaining = viewRemaining;
         this.targets = targets;
+        this.energy = 0;
         this.numGuesses = 0;
         this.restart();
     }
 
     restart() {
+        this.energy = this.maxEnergy;
         this.numGuesses = 0;
         this.targetsFound = this.targets.reduce((acc, target) => {
             acc[target] = 0;
@@ -43,16 +46,23 @@ export default class Run {
     }
 
     guess(guess) {
+        this.energy -= 20;
         this.numGuesses += 1;
     }
 
     found(target) {
+        this.energy += 100;
         this.targetsFound[target] += 1;
     }
 
-    static generate({ seed, numSlots, numChoices, viewUpcoming, viewRemaining }) {
+    tick() {
+        this.energy -= 1;
+    }
+
+    static generate({ seed, maxEnergy, numSlots, numChoices, viewUpcoming, viewRemaining }) {
         const rng = seedrandom(seed);
         return new Run({
+            maxEnergy,
             numSlots,
             numChoices,
             viewUpcoming,

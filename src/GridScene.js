@@ -174,7 +174,14 @@ export default class GridScene extends Phaser.Scene {
     this.events.on('guess', this.onGuess, this)
     this.events.on('found', this.onFound, this)
     this.events.on('won', this.onWon, this)
+    this.events.on('lost', this.onLost, this)
     this.events.on('shutdown', this.onShutdown, this)
+
+    this.time.addEvent({
+        delay: 500,
+        loop: true,
+        callback: () => this.tick(),
+    })
   }
 
   onShutdown() {
@@ -182,6 +189,16 @@ export default class GridScene extends Phaser.Scene {
     this.events.off('found', this.onFound, this)
     //this.events.off('won', this.onWon, this)
     //this.events.off('shutdown', this.onShutdown, this)
+  }
+
+  tick() {
+      const run = this.registry.get('run');
+      run.tick();
+
+      if (run.energy <= 0) {
+        this.gameOver = true;
+        this.scene.scene.events.emit('lost', {});
+      }
   }
 
   onGuess(guess) {
@@ -196,6 +213,12 @@ export default class GridScene extends Phaser.Scene {
 
   onWon() {
       this.scene.start('WinScene');
+      this.scene.stop('GridScene');
+      this.scene.stop('HudScene');
+  }
+
+  onLost() {
+      this.scene.start('LoseScene');
       this.scene.stop('GridScene');
       this.scene.stop('HudScene');
   }

@@ -34,22 +34,29 @@ export default class HudScene extends Phaser.Scene {
     console.log('hud preload');
   }
 
-  create() {
-    console.log('hud create');
-    const { width, height } = this.sys.game.config;
-    const run = this.registry.get('run');
+    create() {
+        console.log('hud create');
+        const { width, height } = this.sys.game.config;
+        const run = this.registry.get('run');
 
-    this.targetCounters = {};
-      if (run.viewRemaining) {
-        Object.keys(run.summary.targets).forEach((target, i) => {
-          this.targetCounters[target] = new TargetCounter(this, i*40, 0, target);
-        })
-      }
-  }
+        this.targetCounters = {};
+        if (run.viewRemaining) {
+            Object.keys(run.summary.targets).forEach((target, i) => {
+                this.targetCounters[target] = new TargetCounter(this, i * 40, 0, target);
+            })
+        }
+
+        this.energyText = this.add.text(width - 50, 10, run.energy, {
+            fill: '#ffc300',
+            fontSize: '24px',
+        }).setOrigin(1, 0);
+    }
 
   update(time, delta) {
+    const run = this.registry.get('run');
     Object.values(this.targetCounters).forEach((counter) => {
         counter.update(time, delta);
     })
+    this.energyText.setText(run.energy);
   }
 }

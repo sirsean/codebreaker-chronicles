@@ -1,8 +1,9 @@
 import * as Phaser from 'phaser';
 
-export default class WinScene extends Phaser.Scene {
+
+export default class LoseScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'WinScene' });
+        super({ key: 'LoseScene' });
         this.minDelay = 250;
         this.maxDelay = 600;
         this.lines = [];
@@ -16,16 +17,17 @@ export default class WinScene extends Phaser.Scene {
             '$ ...',
             '$ ...',
             '$ ...',
-            '$ transmission completed.',
+            '$ transmission received.',
             '.. analyzing ..',
-            '>>>> You win! <<<<',
-            '$ ... ',
+            '. . .',
+            '... ...',
             (run.numSlots == 1) ? `>> There was ${run.numSlots} cell in the grid <<` : `>> There were ${run.numSlots} cells in the grid <<`,
-            '$ ... ',
+            '.. .. ..',
             (run.numGuesses == 1) ? `>> You guessed ${run.numGuesses} time <<` : `>> You guessed ${run.numGuesses} times <<`,
-            '$ ... ',
-            '$ ... ',
-            `.. efficiency rating ${(100 * run.numSlots / run.numGuesses).toFixed(2)}% ..`,
+            '... ...',
+            '>>> transmission lost <<<',
+            (run.summary.remainingCount == 1) ? `>> There was ${run.summary.remainingCount} cell remaining <<` : `>> There were ${run.summary.remainingCount} cells remaining <<`,
+            '$ ...',
         ];
 
         this.resultsText = this.add.text(12, 24, '', {
@@ -64,9 +66,9 @@ export default class WinScene extends Phaser.Scene {
         const run = this.registry.get('run');
         run.restart();
 
-        // Start GridScene and HudScene, stop WinScene
+        // Start GridScene and HudScene, stop LoseScene
         this.scene.start('GridScene');
         this.scene.launch('HudScene');
-        this.scene.stop('WinScene');
+        this.scene.stop('LoseScene');
     }
 }

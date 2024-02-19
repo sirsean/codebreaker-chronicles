@@ -7,6 +7,7 @@ import HudScene from './HudScene'
 import GridScene from './GridScene'
 import StartScene from './StartScene';
 import WinScene from './WinScene';
+import LoseScene from './LoseScene';
 
 function Game({ run }) {
   if (!run) {
@@ -32,6 +33,7 @@ function Game({ run }) {
         scene: [
           StartScene,
           WinScene,
+          LoseScene,
           GridScene,
           HudScene,
         ],
@@ -67,7 +69,8 @@ function Game({ run }) {
 function App() {
   const run = Run.generate({
     seed: 12345,
-    numSlots: 12,
+    maxEnergy: 100,
+    numSlots: 9,
     numChoices: 6,
     viewUpcoming: 2,
     viewRemaining: true,
