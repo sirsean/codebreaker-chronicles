@@ -1,33 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useRef, useState } from 'react'
+import * as Phaser from 'phaser';
+import background1 from './assets/img/background/background-1.png'
 import './App.css'
+import Run from './Run'
+import HudScene from './HudScene'
+import GridScene from './GridScene'
+import StartScene from './StartScene';
+import WinScene from './WinScene';
 
-function App() {
-  const [count, setCount] = useState(0)
+function Game({ run }) {
+  if (!run) {
+    return null;
+  }
+  const [game, setGame] = useState(null);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (canvasRef) {
+      const g = new Phaser.Game({
+        type: Phaser.WEBGL,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        canvas: canvasRef.current,
+        physics: {
+          default: 'arcade',
+          arcade: {
+            gravity: { y: 0 },
+            debug: false
+          }
+        },
+        scene: [
+          StartScene,
+          WinScene,
+          GridScene,
+          HudScene,
+        ],
+      });
+      g.registry.set('run', run);
+      setGame(g);
+    }
+    return () => {
+      if (game) {
+        game.destroy();
+      }
+      setGame(null);
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleWon = (event) => {
+      console.log(event);
+    }
+
+    window.addEventListener('won', handleWon);
+
+    return () => {
+      window.removeEventListener('won', handleWon);
+    }
+  }, [])
 
   return (
+    <canvas ref={canvasRef} />
+  )
+}
+
+function App() {
+  const run = Run.generate({
+    seed: 12345,
+    numSlots: 4,
+    numChoices: 6,
+    viewUpcoming: 2,
+    viewRemaining: true,
+  });
+  return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Game run={run} />
     </>
   )
 }
