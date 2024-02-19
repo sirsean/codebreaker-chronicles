@@ -14,9 +14,10 @@ const State = Object.freeze({
 })
 
 class RotatingSprite extends Phaser.GameObjects.Container {
-  constructor(scene, run, x, y, target, values) {
+  constructor(scene, run, cellSize, x, y, target, values) {
     super(scene, x, y);
 
+    this.cellSize = cellSize;
     this.target = target;
     this.values = shuffle(values);
     this._currentIndex = 0;
@@ -27,19 +28,22 @@ class RotatingSprite extends Phaser.GameObjects.Container {
 
     scene.add.existing(this);
 
+    const scale = this.cellSize / 200;
+
     this.symbolSprite = new Phaser.GameObjects.Sprite(scene, 0, 0);
+    this.symbolSprite.setScale(scale);
     this.symbolSprite.setInteractive().setOrigin(0, 0);
     this.add(this.symbolSprite);
 
     this.upcomingSprites = [];
     for (let i = 0; i < run.viewUpcoming; i++) {
-      const sprite = new Phaser.GameObjects.Sprite(scene, 200, i*40).setOrigin(1, 0).setScale(0.2);
+      const sprite = new Phaser.GameObjects.Sprite(scene, this.cellSize, i*40*scale).setOrigin(1, 0).setScale(0.2*scale);
       this.add(sprite);
       this.upcomingSprites.push(sprite);
     }
 
     this.cooldownStart = this.scene.time.now;
-    this.cooldownCircle = new Phaser.GameObjects.Arc(scene, 5, 5, 15, 360, 360, true, 0xFFC300);
+    this.cooldownCircle = new Phaser.GameObjects.Arc(scene, 5, 5, 15*scale, 360, 360, true, 0xFFC300);
     this.cooldownCircle.setOrigin(0, 0);
     this.add(this.cooldownCircle);
 
@@ -150,15 +154,21 @@ export default class GridScene extends Phaser.Scene {
     console.log('create');
     this.gameOver = false;
     const run = this.registry.get('run');
+
+    const topBarHeight = 50;
+    const gridSize = Math.ceil(Math.sqrt(run.numSlots));
+    const { width, height } = this.sys.game.config;
+    const screenSize = Math.min(width, height - topBarHeight);
+    const cellSize = Math.min(200, screenSize / gridSize);
     this.slots = [];
     for (let i = 0; i < run.numSlots; i++) {
-      const row = Math.floor(i / run.numColumns);
-      const col = i % run.numColumns;
+      const row = Math.floor(i / gridSize);
+      const col = i % gridSize;
 
-      const x = col * 200;
-      const y = row * 200;
+      const x = col * cellSize;
+      const y = topBarHeight + row * cellSize;
 
-      this.slots.push(new RotatingSprite(this, run, x, y, run.targets[i], run.choices));
+      this.slots.push(new RotatingSprite(this, run, cellSize, x, y, run.targets[i], run.choices));
     }
     this.events.on('found', this.onFound, this)
     this.events.on('won', this.onWon, this)
