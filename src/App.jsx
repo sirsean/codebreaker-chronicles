@@ -67,7 +67,7 @@ function Game({ run }) {
 function App() {
   const run = Run.generate({
     seed: 12345,
-    numSlots: 48,
+    numSlots: 12,
     numChoices: 6,
     viewUpcoming: 2,
     viewRemaining: true,

@@ -23,8 +23,10 @@ export default class StartScene extends Phaser.Scene {
 
     create() {
         // Create a start button and add click event
-        const startButton = this.add.text(100, 100, 'Start Game', { fill: '#ffc300' })
-            .setInteractive()
+        const startButton = this.add.text(100, 100, 'Start Run', {
+            fill: '#ffc300',
+            fontSize: '64px'
+         }).setInteractive()
             .on('pointerdown', () => this.startGame());
 
         // Position the start button (example)

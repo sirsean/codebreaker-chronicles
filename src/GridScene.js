@@ -57,6 +57,7 @@ class RotatingSprite extends Phaser.GameObjects.Container {
       return;
     }
     const current = this.currentValue;
+    this.scene.events.emit('guess', current);
     if (current == this.target) {
       if (this.timer) {
         this.timer.remove();
@@ -170,15 +171,22 @@ export default class GridScene extends Phaser.Scene {
 
       this.slots.push(new RotatingSprite(this, run, cellSize, x, y, run.targets[i], run.choices));
     }
+    this.events.on('guess', this.onGuess, this)
     this.events.on('found', this.onFound, this)
     this.events.on('won', this.onWon, this)
     this.events.on('shutdown', this.onShutdown, this)
   }
 
   onShutdown() {
+    this.events.off('guess', this.onGuess, this)
     this.events.off('found', this.onFound, this)
     //this.events.off('won', this.onWon, this)
     //this.events.off('shutdown', this.onShutdown, this)
+  }
+
+  onGuess(guess) {
+    const run = this.registry.get('run');
+    run.guess(guess);
   }
 
     onFound(target) {

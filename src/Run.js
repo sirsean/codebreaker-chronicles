@@ -8,10 +8,12 @@ export default class Run {
         this.viewUpcoming = viewUpcoming;
         this.viewRemaining = viewRemaining;
         this.targets = targets;
+        this.numGuesses = 0;
         this.restart();
     }
 
     restart() {
+        this.numGuesses = 0;
         this.targetsFound = this.targets.reduce((acc, target) => {
             acc[target] = 0;
             return acc;
@@ -20,14 +22,6 @@ export default class Run {
 
     get choices() {
         return Array.from({ length: this.numChoices }, (_, i) => i + 1);
-    }
-
-    get numColumns() {
-        return Math.min(5, Math.ceil(Math.sqrt(this.numSlots)));
-    }
-
-    get numRows() {
-        return Math.ceil(this.numSlots / this.numColumns);
     }
 
     get summary() {
@@ -41,10 +35,15 @@ export default class Run {
         }, {});
         const remainingCount = Object.values(remaining).reduce((acc, val) => acc + val, 0);
         return {
+            numGuesses: this.numGuesses,
             targets,
             remaining,
             remainingCount,
         }
+    }
+
+    guess(guess) {
+        this.numGuesses += 1;
     }
 
     found(target) {
