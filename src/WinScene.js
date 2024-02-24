@@ -1,52 +1,38 @@
 import * as Phaser from 'phaser';
+import ConsoleLines from './ConsoleLines';
 
 export default class WinScene extends Phaser.Scene {
     constructor() {
         super({ key: 'WinScene' });
-        this.minDelay = 250;
-        this.maxDelay = 600;
-        this.lines = [];
     }
 
     create() {
         const run = this.registry.get('run');
 
-        this.lines = [
-            '$ incoming transmission ...',
-            '$ ...',
-            '$ ...',
-            '$ ...',
-            '$ transmission completed.',
-            '.. analyzing ..',
-            '>>>> You win! <<<<',
-            '$ ... ',
-            (run.numSlots == 1) ? `>> There was ${run.numSlots} cell in the grid <<` : `>> There were ${run.numSlots} cells in the grid <<`,
-            '$ ... ',
-            (run.numGuesses == 1) ? `>> You guessed ${run.numGuesses} time <<` : `>> You guessed ${run.numGuesses} times <<`,
-            '$ ... ',
-            '$ ... ',
-            `.. efficiency rating ${(100 * run.efficiency).toFixed(2)}% ..`,
-            '. . .',
-            '... ...',
-            `// final score: ${run.score.toFixed(0)} //`,
-        ];
-
-        this.resultsText = this.add.text(12, 24, '', {
-            fill: '#ffc300',
-            fontSize: '24px',
+        this.lines = new ConsoleLines(this, 0, 0, {
+            minDelay: 250,
+            maxDelay: 600,
+            onComplete: this.addStartButton,
+            lines: [
+                '$ incoming transmission ...',
+                '$ ...',
+                '$ ...',
+                '$ ...',
+                '$ transmission completed.',
+                '.. analyzing ..',
+                '>>>> You win! <<<<',
+                '$ ... ',
+                (run.numSlots == 1) ? `>> There was ${run.numSlots} cell in the grid <<` : `>> There were ${run.numSlots} cells in the grid <<`,
+                '$ ... ',
+                (run.numGuesses == 1) ? `>> You guessed ${run.numGuesses} time <<` : `>> You guessed ${run.numGuesses} times <<`,
+                '$ ... ',
+                '$ ... ',
+                `.. efficiency rating ${(100 * run.efficiency).toFixed(2)}% ..`,
+                '. . .',
+                '... ...',
+                `// final score: ${run.score.toFixed(0)} //`,
+            ],
         });
-
-        this.nextLine();
-    }
-
-    nextLine() {
-        const line = this.lines.shift();
-        this.resultsText.setText(this.resultsText.text + '\n' + line);
-        if (this.lines.length > 0) {
-            this.time.delayedCall(Phaser.Math.Between(this.minDelay, this.maxDelay), this.nextLine, [], this);
-        } else {
-            this.time.delayedCall(this.minDelay, this.addStartButton, [], this);
-        }
     }
 
     addStartButton() {
