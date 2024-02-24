@@ -13,7 +13,7 @@ export default class LoseScene extends Phaser.Scene {
         const run = this.registry.get('run');
 
         this.lines = [
-            '$ transmission receiving...',
+            '$ incoming transmission ...',
             '$ ...',
             '$ ...',
             '$ ...',

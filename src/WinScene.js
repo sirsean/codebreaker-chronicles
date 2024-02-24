@@ -12,7 +12,7 @@ export default class WinScene extends Phaser.Scene {
         const run = this.registry.get('run');
 
         this.lines = [
-            '$ transmission receiving...',
+            '$ incoming transmission ...',
             '$ ...',
             '$ ...',
             '$ ...',
@@ -25,7 +25,10 @@ export default class WinScene extends Phaser.Scene {
             (run.numGuesses == 1) ? `>> You guessed ${run.numGuesses} time <<` : `>> You guessed ${run.numGuesses} times <<`,
             '$ ... ',
             '$ ... ',
-            `.. efficiency rating ${(100 * run.numSlots / run.numGuesses).toFixed(2)}% ..`,
+            `.. efficiency rating ${(100 * run.efficiency).toFixed(2)}% ..`,
+            '. . .',
+            '... ...',
+            `// final score: ${run.score.toFixed(0)} //`,
         ];
 
         this.resultsText = this.add.text(12, 24, '', {

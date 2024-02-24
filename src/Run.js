@@ -27,6 +27,32 @@ export default class Run {
         return Array.from({ length: this.numChoices }, (_, i) => i + 1);
     }
 
+    get efficiency() {
+        return this.numSlots / this.numGuesses;
+    }
+
+    get score() {
+        // Base Score Calculation: simple linear relation to numCells
+        const baseScorePerCell = 25; // Points per cell, adjust as needed
+        const baseScore = this.numSlots * baseScorePerCell;
+        
+        // Efficiency Factor: numCells / numGuesses
+        // Prevent division by zero in case of no guesses
+        const efficiency = this.numGuesses > 0 ? this.numSlots / this.numGuesses : 0;
+    
+        // Efficiency Factor: Adjust this formula as needed to balance your game
+        const efficiencyBonus = efficiency * 50; // Adjust multiplier for balancing
+        
+        // Energy Bonus: directly proportional to the remaining energy
+        const energyBonus = this.energy * 2; // Adjust multiplier for balancing
+    
+        // Final Score
+        const score = baseScore * efficiencyBonus + energyBonus;
+    
+        return Math.round(score); // Returning the score rounded to the nearest integer
+    }
+
+
     get summary() {
         const targets = this.targets.reduce((acc, target) => {
             acc[target] = (acc[target] || 0) + 1;
@@ -51,7 +77,7 @@ export default class Run {
     }
 
     found(target) {
-        this.energy += 100;
+        this.energy += 50;
         this.targetsFound[target] += 1;
     }
 

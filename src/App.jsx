@@ -68,12 +68,12 @@ function Game({ run }) {
 
 function App() {
   const run = Run.generate({
-    seed: 12345,
+    seed: 1234,
     maxEnergy: 100,
     numSlots: 9,
-    numChoices: 6,
-    viewUpcoming: 2,
-    viewRemaining: true,
+    numChoices: 4,
+    viewUpcoming: 1,
+    viewRemaining: false,
   });
   return (
     <>
