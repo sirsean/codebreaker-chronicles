@@ -29,6 +29,8 @@ export default class ConsoleLines extends Phaser.GameObjects.Container {
         } else {
             this.scene.time.delayedCall(this.minDelay, this.onComplete, [], this.scene);
         }
+
+        this.setSize(this.resultsText.displayWidth, this.resultsText.displayHeight);
     }
 
     defaultOnComplete() {

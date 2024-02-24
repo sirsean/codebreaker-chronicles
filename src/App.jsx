@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import * as Phaser from 'phaser';
-import background1 from './assets/img/background/background-1.png'
 import './App.css'
-import Run from './Run'
 import HudScene from './HudScene'
 import GridScene from './GridScene'
 import StartScene from './StartScene';
 import WinScene from './WinScene';
 import LoseScene from './LoseScene';
 
-function Game({ run }) {
-  if (!run) {
-    return null;
-  }
+function Game() {
   const [game, setGame] = useState(null);
   const canvasRef = useRef(null);
 
@@ -38,7 +33,6 @@ function Game({ run }) {
           HudScene,
         ],
       });
-      g.registry.set('run', run);
       setGame(g);
     }
     return () => {
@@ -67,17 +61,9 @@ function Game({ run }) {
 }
 
 function App() {
-  const run = Run.generate({
-    seed: 1234,
-    maxEnergy: 100,
-    numSlots: 9,
-    numChoices: 4,
-    viewUpcoming: 1,
-    viewRemaining: false,
-  });
   return (
     <>
-      <Game run={run} />
+      <Game />
     </>
   )
 }

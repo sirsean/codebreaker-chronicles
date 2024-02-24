@@ -37,25 +37,31 @@ export default class WinScene extends Phaser.Scene {
 
     addStartButton() {
         // Create a start button and add click event
-        const startButton = this.add.text(100, 100, 'Play Again', {
+        this.add.text(24, this.lines.displayHeight + 50, 'Play Again', {
             fill: '#ffc300',
-            fontSize: '64px',
+            fontSize: '42px',
          }).setInteractive()
-            .on('pointerdown', () => this.startGame());
-
-        // Position the start button (example)
-        startButton.x = this.cameras.main.centerX - startButton.width / 2;
-        startButton.y = this.cameras.main.height * 0.55 - startButton.height / 2;
+            .on('pointerdown', () => this.playAgain());
+        
+        this.add.text(24, this.lines.displayHeight + 100, 'Main Menu', {
+            fill: '#ffc300',
+            fontSize: '42px',
+         }).setInteractive()
+            .on('pointerdown', () => this.mainMenu());
     }
 
-    startGame() {
+    playAgain() {
         // prep the run
         const run = this.registry.get('run');
         run.restart();
 
         // Start GridScene and HudScene, stop WinScene
         this.scene.start('GridScene');
-        this.scene.launch('HudScene');
+        this.scene.stop('WinScene');
+    }
+
+    mainMenu() {
+        this.scene.start('StartScene');
         this.scene.stop('WinScene');
     }
 }

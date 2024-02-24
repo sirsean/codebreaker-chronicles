@@ -4,9 +4,6 @@ import ConsoleLines from './ConsoleLines';
 export default class LoseScene extends Phaser.Scene {
     constructor() {
         super({ key: 'LoseScene' });
-        this.minDelay = 250;
-        this.maxDelay = 600;
-        this.lines = [];
     }
 
     create() {
@@ -37,16 +34,17 @@ export default class LoseScene extends Phaser.Scene {
     }
 
     addStartButton() {
-        // Create a start button and add click event
-        const startButton = this.add.text(100, 100, 'Play Again', {
+        this.add.text(24, this.lines.displayHeight + 50, 'Play Again', {
             fill: '#ffc300',
-            fontSize: '64px',
+            fontSize: '42px',
          }).setInteractive()
             .on('pointerdown', () => this.startGame());
-
-        // Position the start button (example)
-        startButton.x = this.cameras.main.centerX - startButton.width / 2;
-        startButton.y = this.cameras.main.height * 0.55 - startButton.height / 2;
+        
+        this.add.text(24, this.lines.displayHeight + 100, 'Main Menu', {
+            fill: '#ffc300',
+            fontSize: '42px',
+         }).setInteractive()
+            .on('pointerdown', () => this.mainMenu());
     }
 
     startGame() {
@@ -57,6 +55,11 @@ export default class LoseScene extends Phaser.Scene {
         // Start GridScene and HudScene, stop LoseScene
         this.scene.start('GridScene');
         this.scene.launch('HudScene');
+        this.scene.stop('LoseScene');
+    }
+
+    mainMenu() {
+        this.scene.start('StartScene');
         this.scene.stop('LoseScene');
     }
 }
