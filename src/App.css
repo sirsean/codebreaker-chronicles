@@ -1,3 +1,10 @@
 canvas {
     margin-top: 0px !important;
 }
+
+.HomePage {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}

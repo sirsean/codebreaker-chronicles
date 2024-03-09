@@ -65,7 +65,7 @@ export default class StartScene extends Phaser.Scene {
             onComplete: this.addStartButton,
             lines: [
                 '//',
-                '// welcome to codebreaker-chronicles',
+                '// welcome to grid-pattern',
                 '...',
                 '...',
                 '// try to crack the code',
@@ -79,6 +79,7 @@ export default class StartScene extends Phaser.Scene {
                 '...',
                 '// you win if you guess the full sequence',
                 '// you lose if you run out of energy',
+                '...',
                 '...',
                 '// good luck out there',
                 '//',
