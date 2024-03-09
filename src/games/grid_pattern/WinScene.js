@@ -36,7 +36,6 @@ export default class WinScene extends Phaser.Scene {
     }
 
     addStartButton() {
-        // Create a start button and add click event
         this.add.text(24, this.lines.displayHeight + 50, 'Play Again', {
             fill: '#ffc300',
             fontSize: '42px',

@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import { seededRandInt } from './util';
+import { seededRandInt } from '../../util';
 
 export default class Run {
     constructor({ maxEnergy, numSlots, numChoices, viewUpcoming, viewRemaining, targets }) {

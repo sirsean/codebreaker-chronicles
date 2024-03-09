@@ -1,11 +1,5 @@
 import * as Phaser from 'phaser';
-import neon1 from './assets/img/runes/neon-1.png'
-import neon2 from './assets/img/runes/neon-2.png'
-import neon3 from './assets/img/runes/neon-3.png'
-import neon4 from './assets/img/runes/neon-4.png'
-import neon5 from './assets/img/runes/neon-5.png'
-import neon6 from './assets/img/runes/neon-6.png'
-import { shuffle, wrappingSlice } from './util'
+import { shuffle, wrappingSlice } from '../../util'
 
 const State = Object.freeze({
   UNKNOWN: 'UNKNOWN',
