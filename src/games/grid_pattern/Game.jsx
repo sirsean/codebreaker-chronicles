@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import * as Phaser from 'phaser';
 import HudScene from './HudScene'
 import GridScene from './GridScene'
@@ -7,6 +8,7 @@ import WinScene from './WinScene';
 import LoseScene from './LoseScene';
 
 export function Game() {
+  const navigate = useNavigate();
   const [game, setGame] = useState(null);
   const canvasRef = useRef(null);
 
@@ -46,11 +48,16 @@ export function Game() {
     const handleWon = (event) => {
       console.log(event);
     }
+    const handleEscape = (event) => {
+      navigate('/');
+    }
 
     window.addEventListener('won', handleWon);
+    window.addEventListener('escape', handleEscape);
 
     return () => {
       window.removeEventListener('won', handleWon);
+      window.removeEventListener('escape', handleEscape);
     }
   }, [])
 

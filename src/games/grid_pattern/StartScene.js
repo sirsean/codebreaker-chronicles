@@ -88,30 +88,21 @@ export default class StartScene extends Phaser.Scene {
     }
 
     addStartButton() {
-        this.add.text(24, this.lines.displayHeight + 50, 'Start: Demo-1', {
-            fill: '#ffc300',
-            fontSize: '42px'
-         }).setInteractive()
-            .setOrigin(0, 0)
-            .on('pointerdown', () => this.startGame(0));
-        this.add.text(24, this.lines.displayHeight + 100, 'Start: Demo-2', {
-            fill: '#ffc300',
-            fontSize: '42px'
-         }).setInteractive()
-            .setOrigin(0, 0)
-            .on('pointerdown', () => this.startGame(1));
-        this.add.text(24, this.lines.displayHeight + 150, 'Start: Demo-3', {
-            fill: '#ffc300',
-            fontSize: '42px'
-         }).setInteractive()
-            .setOrigin(0, 0)
-            .on('pointerdown', () => this.startGame(2));
-        this.add.text(24, this.lines.displayHeight + 200, 'Start: Demo-4', {
-            fill: '#ffc300',
-            fontSize: '42px'
-         }).setInteractive()
-            .setOrigin(0, 0)
-            .on('pointerdown', () => this.startGame(3));
+        const buttons = [
+            { text: '<< Escape', fn: () => this.escape() },
+            { text: 'Start: Demo-1', fn: () => this.startGame(0) },
+            { text: 'Start: Demo-2', fn: () => this.startGame(1) },
+            { text: 'Start: Demo-3', fn: () => this.startGame(2) },
+            { text: 'Start: Demo-4', fn: () => this.startGame(3) },
+        ];
+        buttons.forEach((b, i) => {
+            this.add.text(24, this.lines.displayHeight + 50 * (i + 1), b.text, {
+                fill: '#ffc300',
+                fontSize: '42px'
+            }).setInteractive()
+                .setOrigin(0, 0)
+                .on('pointerdown', b.fn);
+        });
     }
 
     startGame(index) {
@@ -123,5 +114,14 @@ export default class StartScene extends Phaser.Scene {
         this.scene.start('GridScene');
         this.scene.launch('HudScene');
         this.scene.stop('StartScene');
+    }
+
+    escape() {
+        const event = new CustomEvent('escape', {
+            detail: {
+                game: 'grid-pattern',
+            }
+        });
+        window.dispatchEvent(event);
     }
 }

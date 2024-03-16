@@ -36,17 +36,17 @@ export default class WinScene extends Phaser.Scene {
     }
 
     addStartButton() {
-        this.add.text(24, this.lines.displayHeight + 50, 'Play Again', {
-            fill: '#ffc300',
-            fontSize: '42px',
-         }).setInteractive()
-            .on('pointerdown', () => this.playAgain());
-        
-        this.add.text(24, this.lines.displayHeight + 100, 'Main Menu', {
-            fill: '#ffc300',
-            fontSize: '42px',
-         }).setInteractive()
-            .on('pointerdown', () => this.mainMenu());
+        const buttons = [
+            { text: 'Play Again', fn: () => this.playAgain() },
+            { text: 'Main Menu', fn: () => this.mainMenu() },
+        ];
+        buttons.forEach((b, i) => {
+            this.add.text(24, this.lines.displayHeight + 50 * (i + 1), b.text, {
+                fill: '#ffc300',
+                fontSize: '42px',
+            }).setInteractive()
+                .on('pointerdown', b.fn);
+        });
     }
 
     playAgain() {
